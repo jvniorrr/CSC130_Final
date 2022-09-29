@@ -103,10 +103,10 @@ public class Graphic extends JFrame{
 		DisplayMode[] dms = gd.getDisplayModes();
 		boolean isSupported = false;
 		/** DEFAULT  */
-		// int vindexN3 = isSupported(1280, 720, 32, dms);
+		int vindexN3 = isSupported(1280, 720, 32, dms);
 
 		/** TWEAKED TO 1280x800 */
-		int vindexN3 = isSupported(1280, 800, 32, dms);
+		// int vindexN3 = isSupported(1280, 800, 32, dms);
 		if(vindexN3 != -1){			// 720p supported
 			_dm = dms[vindexN3]; 
 			isSupported = true;
