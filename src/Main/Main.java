@@ -42,10 +42,7 @@ public class Main{
 	
 	/* This is your access to the "game loop" (It is a "callback" method from the Control class (do NOT modify that class!))*/
 	public static void update(Control ctrl) {
-		// TODO: This is where you can code! (Starting code below is just to show you how it works)
-		// ctrl.drawString(1105, 719, "Fernando Mendoza", c);		// Test drawing text on screen where you want (Remove later! Test only!); CP#1
-
-		
+		// TODO: This is where you can code! (Starting code below is just to show you how it works)		
 		ctrl.addSpriteToFrontBuffer(currentVec.getX(),currentVec.getY(), "fighter");		// Add a tester sprite to render list by tag (Remove later! Test only!)
 
 		if (timer.isTimeUp()) {
@@ -61,7 +58,6 @@ public class Main{
 					}
 				}
 
-				isImageDrawn = !isImageDrawn;
 				// reset timer obj for next pass
 				timer.resetWatch();
 		}
