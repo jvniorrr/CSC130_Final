@@ -43,6 +43,6 @@ public class spriteInfo {
 
 	@Override
 	public String toString() {
-		return String.format("spriteInfo[%d, %d, %s", vec.getX(), vec.getY(), this.tag);
+		return String.format("spriteInfo[%d, %d, %s]", vec.getX(), vec.getY(), this.tag);
 	}
 }
