@@ -12,20 +12,13 @@ import timer.stopWatchX;
 
 public class Main {
 	// Fields (Static) below...
-	public static Color c = new Color(0, 148, 156);
-	public static boolean isImageDrawn = false;
-	public static stopWatchX timer = new stopWatchX(150); // set flashing timer to 250 or 1/4 of second
+	public static stopWatchX timer = new stopWatchX(150); // set flashing timer to 150 or 1/4 of second
 
-	// Queue to hold animation movements
-	public static Queue<Vector2D> vecs1 = new LinkedList<Vector2D>();
-	public static Queue<Vector2D> vecs2 = new LinkedList<Vector2D>();
 
 	// collection to hold our animation frames
 	public static ArrayList<spriteInfo> sprites = new ArrayList<>();
 	public static int currentSpriteIndex = 0;
 
-	// obj to hold current vec in use
-	public static Vector2D currentVec = new Vector2D(-100, -100); // position to start off screen intially.
 	// End Static fields...
 
 	public static void main(String[] args) {
