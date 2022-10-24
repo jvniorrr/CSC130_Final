@@ -1,2 +1,7 @@
 Art/f.png*f0
 Art/fighter.png*fighter
+Art/avatar.png*front0
+Art/right/RightAvatarOne.png*walk0
+Art/right/RightAvatarTwo.png*walk1
+Art/right/RightAvatarThree.png*walk2
+Art/right/RightAvatarTwo.png*walk3
