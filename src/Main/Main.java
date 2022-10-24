@@ -31,20 +31,29 @@ public class Main {
 		// TODO: Code your starting conditions here...NOT DRAW CALLS HERE! (no addSprite
 		// or drawString)
 		int counterRef = 0;
-		for (int i = -128; i < 1115 + 128; i += 16) {
-			if (counterRef == 0) {
-				sprites.add(new spriteInfo(new Vector2D(i, 0), "walk0"));
-				counterRef++;
-			} else if (counterRef == 1) {
-				sprites.add(new spriteInfo(new Vector2D(i, 0), "walk1"));
-				counterRef++;
-			} else if (counterRef == 2) {
-				sprites.add(new spriteInfo(new Vector2D(i, 0), "walk2"));
-				counterRef++;
-			} else {
-				sprites.add(new spriteInfo(new Vector2D(i, 0), "walk3"));
+		for (int i = -128; i < 1280 + 128; i += 32) {
+
+			spriteInfo tempSprite = new spriteInfo(new Vector2D(i, 0), null);
+
+			tempSprite.setTag(counterRef == 0 ? "walk0" : (counterRef == 1 ? "walk1" : (counterRef == 2 ? "walk2" : "walk3")));
+			counterRef++;
+			sprites.add(tempSprite);
+
+			if (counterRef > 2) 
 				counterRef = 0;
-			}
+			// if (counterRef == 0) {
+			// 	sprites.add(new spriteInfo(new Vector2D(i, 0), "walk0"));
+			// 	counterRef++;
+			// } else if (counterRef == 1) {
+			// 	sprites.add(new spriteInfo(new Vector2D(i, 0), "walk1"));
+			// 	counterRef++;
+			// } else if (counterRef == 2) {
+			// 	sprites.add(new spriteInfo(new Vector2D(i, 0), "walk2"));
+			// 	counterRef++;
+			// } else {
+			// 	sprites.add(new spriteInfo(new Vector2D(i, 0), "walk3"));
+			// 	counterRef = 0;
+			// }
 		}
 	}
 
