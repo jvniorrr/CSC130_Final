@@ -1,9 +1,6 @@
 package Main;
 
-import java.awt.Color;
 import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.Queue;
 
 import Data.Vector2D;
 import Data.spriteInfo;
@@ -32,7 +29,6 @@ public class Main {
 		// or drawString)
 		int counterRef = 0;
 		for (int i = -128; i < 1280 + 128; i += 32) {
-
 			spriteInfo tempSprite = new spriteInfo(new Vector2D(i, 0), null);
 
 			tempSprite.setTag(counterRef == 0 ? "walk0" : (counterRef == 1 ? "walk1" : (counterRef == 2 ? "walk2" : "walk3")));
