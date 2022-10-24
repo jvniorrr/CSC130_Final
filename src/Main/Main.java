@@ -41,19 +41,6 @@ public class Main {
 
 			if (counterRef > 2) 
 				counterRef = 0;
-			// if (counterRef == 0) {
-			// 	sprites.add(new spriteInfo(new Vector2D(i, 0), "walk0"));
-			// 	counterRef++;
-			// } else if (counterRef == 1) {
-			// 	sprites.add(new spriteInfo(new Vector2D(i, 0), "walk1"));
-			// 	counterRef++;
-			// } else if (counterRef == 2) {
-			// 	sprites.add(new spriteInfo(new Vector2D(i, 0), "walk2"));
-			// 	counterRef++;
-			// } else {
-			// 	sprites.add(new spriteInfo(new Vector2D(i, 0), "walk3"));
-			// 	counterRef = 0;
-			// }
 		}
 	}
 
