@@ -1,0 +1,5 @@
+string1*Arthur: 'Mercy is for wimps'
+string2*Arthur: 'This is not a game'
+string3*Arthur: 'Welcome'
+string4*Arthur: 'Enjoy my world'
+string5*Arthur: 'Hello my world'
