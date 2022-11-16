@@ -22,6 +22,9 @@ public class Main {
 	public static int currentSpriteIndex = 0;
 	public static HashMap<String, String> map = new HashMap<>();
 
+	// Variables for rendering img/txt
+	public static String trigger = "";
+
 	// End Static fields...
 
 	public static void main(String[] args) {
@@ -45,7 +48,7 @@ public class Main {
 		// 		counterRef = 0;
 		// }
 
-		// read file
+		// read file; txt for our character
 		EZFileRead ezr = new EZFileRead("Arthur.txt");
 		String st;
 		while (!(st = ezr.getNextLine()).equalsIgnoreCase("END OF FILE")) {
@@ -64,7 +67,7 @@ public class Main {
 		// TODO: This is where you can code! (Starting code below is just to show you
 		// how it works)
 
-		ctrl.drawString(100, 205, map.get("string2"), c);
+		ctrl.drawString(100, 205, trigger, c);
 		
 		// spriteInfo currSprite = sprites.get(currentSpriteIndex);
 		ctrl.addSpriteToFrontBuffer(130, 50, "front0"); // Add a tester sprite to render list by tag (Remove later! Test only!)
