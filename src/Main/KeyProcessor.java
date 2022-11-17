@@ -8,6 +8,7 @@ import timer.stopWatchX;
 public class KeyProcessor{
 	// Static Fields
 	private static char last = ' ';			// For debouncing purposes
+	private static char lastKey = ' ';
 	private static stopWatchX sw = new stopWatchX(250);
 	
 	// Static Method(s)
@@ -25,6 +26,20 @@ public class KeyProcessor{
 			System.exit(0);
 			break;
 			
+		// My input handlers
+		case 'w':
+			Main.trigger = "w has been triggered";
+			break;
+		case 'a':
+			Main.trigger = "a has been triggered";
+			break;
+		case 's':
+			Main.trigger = "s has been triggered";
+			break;
+		case 'd':
+			Main.trigger = "d has been triggered";
+			break;
+
 		case 'm':
 			// For mouse coordinates
 			Control.isMouseCoordsDisplayed = !Control.isMouseCoordsDisplayed;
