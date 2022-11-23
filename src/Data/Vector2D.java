@@ -36,4 +36,11 @@ public class Vector2D {
 	public void adjustY(int adjustment){
 		this.y += adjustment;
 	}
+
+	@Override
+	public String toString() {
+		return "Vector2D [x=" + x + ", y=" + y + "]";
+	}
+
+	
 }
