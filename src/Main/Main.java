@@ -16,6 +16,7 @@ import timer.stopWatchX;
 public class Main {
 	// Fields (Static) below...
 	public static Color c = new Color(0, 6, 43);
+	public static Color coinColor = new Color(252, 219, 3);
 	public static stopWatchX timer = new stopWatchX(300); // set flashing timer to 150 or 1/4 of second
 
 	// collection to hold our animation frames
@@ -43,6 +44,7 @@ public class Main {
 	public static stopWatchX cw = new stopWatchX(3000);
 	public static boolean coinPresent = true;
 	public static Wave coinSound = new Wave("sounds/coinsSound.wav");
+	public static int coinsCollected = 0;
 
 	// End Static fields...
 
@@ -115,6 +117,10 @@ public class Main {
 			ctrl.addSpriteToFrontBuffer(sprites.get(1).getCoords().getX(), sprites.get(1).getCoords().getY(), sprites.get(1).getTag());
 		} else {
 			ctrl.drawString(1090, 500, cointText, c);
+		}
+		// if coins collected show on screen
+		if (coinsCollected > 0) {
+			ctrl.drawString(1175, 50, String.format("%d Coin(s)", coinsCollected), coinColor);
 		}
 
 		// ctrl.drawString(100, 205, trigger, c);

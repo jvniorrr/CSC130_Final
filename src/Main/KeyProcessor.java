@@ -74,6 +74,7 @@ public class KeyProcessor{
 			if (coinCheck && Main.spriteRender.getTag().contains("right") && Main.cw.isTimeUp()) {
 				Main.cointText = "Coin collected"; // TOOD: add the actual coin when on WINDOWS
 				Main.coinPresent = false;
+				Main.coinsCollected++;
 
 				// play sound
 				Main.coinSound.playWAV();
