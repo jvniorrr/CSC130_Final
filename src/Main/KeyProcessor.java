@@ -13,9 +13,10 @@ public class KeyProcessor{
 	// private static stopWatchX cw = new stopWatchX(1000);
 
 	// changing sprite image rendered
-	private static final int MOVE_PX = 32;
+	private static final int MOVE_PX = 16;
 	private static String spriteInfo = "";
 	private static int spriteMoveCount = 0;
+	private static Data.SpriteInfo spriteObject = Main.spriteRender;
 	
 	// Static Method(s)
 	public static void processKey(char key){
@@ -32,7 +33,7 @@ public class KeyProcessor{
 		// }
 
 		Main.doorbell = ""; // reset
-		Data.SpriteInfo sprite = Main.spriteRender;
+		spriteObject = Main.spriteRender;
 		
 		/* TODO: You can modify values below here! */
 		switch(key){
@@ -84,16 +85,16 @@ public class KeyProcessor{
 
 		// TODO: Remove prior to submission; TESTING PURPOSES
 		case 'r':
-			Main.spriteRender.setTag("front0");
-			Main.spriteRender.getCoords().setX(100);
-			Main.spriteRender.getCoords().setY(0);
+			spriteObject.setTag("front0");
+			spriteObject.getCoords().setX(80);
+			spriteObject.getCoords().setY(50);
 			break;
 		case 'b':
-			Main.spriteRender.setTag("front0");
-			// Main.spriteRender.getCoords().setX(1095);
-			Main.spriteRender.getCoords().setX(825);
-			// Main.spriteRender.getCoords().setY(580);
-			Main.spriteRender.getCoords().setY(230);
+			spriteObject.setTag("front0");
+			// spriteObject.getCoords().setX(1095);
+			spriteObject.getCoords().setX(825);
+			// spriteObject.getCoords().setY(580);
+			spriteObject.getCoords().setY(230);
 			break;
 		case 'm':
 			lastKey ='m';
@@ -109,11 +110,11 @@ public class KeyProcessor{
 			if (spriteMoveCount >= 4) {
 				spriteMoveCount = 0;
 			}
-			Main.spriteRender.setTag(spriteInfo + spriteMoveCount);
+			spriteObject.setTag(spriteInfo + spriteMoveCount);
 		} else {
 			spriteMoveCount = 0;
-			Main.spriteRender.setTag(spriteInfo + spriteMoveCount);
+			spriteObject.setTag(spriteInfo + spriteMoveCount);
 		}
-		Main.spriteRender.moveSprite(moveCountX, moveCountY);
+		spriteObject.moveSprite(moveCountX, moveCountY);
 	}
 }
