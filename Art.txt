@@ -18,3 +18,4 @@ Art/down/DownAvatarTwo.png*down1
 Art/down/DownAvatarThree.png*down2
 Art/down/DownAvatarTwo.png*down3
 Art/background.png*background
+Art/Coin.png*coin
