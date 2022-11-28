@@ -19,7 +19,7 @@ public class BoundingBox {
         this.y2 = spriteLocation.getY() + 128;
     }
 
-    // Custom bounding box barriers
+    // Constructor: Custom bounding box barriers
     public BoundingBox(Vector2D spriteLocation, int width, int height) {
         // Default image size's 
         this.spriteLocation = spriteLocation;
@@ -29,6 +29,7 @@ public class BoundingBox {
         this.y1 = spriteLocation.getY();
         this.y2 = spriteLocation.getY() + height;
     }
+    // Constructor; default for top left
     public BoundingBox(int width, int height) {
         this.spriteLocation = new Vector2D(0, 0);
         this.x1 = spriteLocation.getX();
@@ -58,6 +59,13 @@ public class BoundingBox {
 
     public int getY2() {
         return y2;
+    }
+
+    public int getCenterHeight() {
+        return (y1 + y2)/2;
+    }
+    public int getCenterWidth() {
+        return (x1 + x2)/2;
     }
 
 
@@ -99,4 +107,9 @@ public class BoundingBox {
     public void setY2(int y2) {
         this.y2 = y2;
     }    
+
+    @Override
+    public String toString() {
+        return String.format("BoundingBox[x1=%d, x2=%d, y1=%d, y2=%d]", x1, x2, y1, y2);
+    }
 }

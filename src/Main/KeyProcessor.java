@@ -2,8 +2,6 @@
 
 package Main;
 
-import Data.BoundingBox;
-import Graphics.Graphic;
 import logic.Control;
 import timer.stopWatchX;
 
@@ -12,6 +10,7 @@ public class KeyProcessor{
 	private static char last = ' ';			// For debouncing purposes
 	private static char lastKey = ' ';
 	private static stopWatchX sw = new stopWatchX(250);
+	// private static stopWatchX cw = new stopWatchX(1000);
 
 	// changing sprite image rendered
 	private static final int MOVE_PX = 32;
@@ -27,7 +26,13 @@ public class KeyProcessor{
 		last = key;
 		sw.resetWatch();
 
+		// if (cw.isTimeUp()) {
+		// 	Main.coinPresent = true;
+		// 	cw.resetWatch();
+		// }
+
 		Main.doorbell = ""; // reset
+		Data.SpriteInfo sprite = Main.spriteRender;
 		
 		/* TODO: You can modify values below here! */
 		switch(key){
@@ -39,38 +44,42 @@ public class KeyProcessor{
 		case 'w':
 			lastKey = 'w';
 			spriteInfo = "up";
-			// Main.trigger = "w has been triggered";
 			moveSprite(spriteInfo, 0, -MOVE_PX, key);
 			break;
 		case 'a':
 			lastKey = 'a';
 			spriteInfo = "left";
-			// Main.trigger = "a has been triggered";
 			moveSprite(spriteInfo, -MOVE_PX, 0, key);
 			break;
 		case 's':
 			lastKey = 's';
 			spriteInfo = "down";
-			// Main.trigger = "s has been triggered";
 			moveSprite(spriteInfo, 0, MOVE_PX, key);
 			break;
 		case 'd':
 			lastKey = 'd';
 			spriteInfo = "right";
-			// Main.trigger = "d has been triggered";
 			moveSprite(spriteInfo, MOVE_PX, 0, key);
 			break;
 		case '$':
 			lastKey = '$';
-			// (box1.getX1() > box2.getX2()) || (box1.getX2() < box2.getX1()) ||(box1.getY1() > box2.getY2()) || (box1.getY2() < box2.getY1())
-			// boolean nearby = !( (Main.spriteRender.getBoundingBox().getX1() >= Main.doorBoundary.getX2()) || (Main.spriteRender.getBoundingBox().getX2() <= Main.doorBoundary.getX1()) || (Main.spriteRender.getBoundingBox().getY1() >= Main.doorBoundary.getY2()) || (Main.spriteRender.getBoundingBox().getY2() <= Main.doorBoundary.getY1()));
-			boolean doorCheck = ((Main.doorBoundary.getY2() - Main.spriteRender.getBoundingBox().getY1() > -20) && Main.spriteRender.getBoundingBox().getX1() > Main.doorBoundary.getX1() && Main.spriteRender.getBoundingBox().getX1() < Main.doorBoundary.getX2() );
-			if ( doorCheck && Main.spriteRender.getTag().contains("up")) {
-				System.out.println("some text");
-				Main.doorbell = "Next level";
-			} else {
-				Main.doorbell = "get closer";
+
+			boolean doorCheck = ((Main.spriteRender.getBoundingBox().getY1()  - Main.doorBoundary.getY2() < 30) && Main.spriteRender.getBoundingBox().getX1() > Main.doorBoundary.getX1() && Main.spriteRender.getBoundingBox().getX1() < Main.doorBoundary.getX2() );
+			if (doorCheck && Main.spriteRender.getTag().contains("up")) {
+				Main.doorbell = "Next level"; //TODO: diff doorbell text
 			}
+
+			boolean coinCheck = ( (Main.spriteRender.getBoundingBox().getCenterHeight() >= Main.coinBoundary.getY1() || Main.coinBoundary.getY1() - Main.spriteRender.getBoundingBox().getCenterHeight() < 50) && (Main.spriteRender.getBoundingBox().getCenterHeight() <= Main.coinBoundary.getY2())  && (Main.coinBoundary.getX1() - Main.spriteRender.getBoundingBox().getX1() < 150));
+			if (coinCheck && Main.spriteRender.getTag().contains("right") && Main.cw.isTimeUp()) {
+				Main.cointText = "Coin collected"; // TOOD: add the actual coin when on WINDOWS
+				Main.coinPresent = false;
+
+				// play sound
+				Main.coinSound.playWAV();
+
+				Main.cw.resetWatch();
+			}
+			
 			break;
 
 		// TODO: Remove prior to submission; TESTING PURPOSES

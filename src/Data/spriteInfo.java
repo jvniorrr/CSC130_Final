@@ -2,7 +2,7 @@
 
 package Data;
 
-public class spriteInfo {
+public class SpriteInfo {
 	// Fields
 	private Vector2D vec;
 	private String tag;
@@ -14,7 +14,7 @@ public class spriteInfo {
 	private Vector2D lastVec;
 
 	// Constructor
-	public spriteInfo(Vector2D v2d, String tag) {
+	public SpriteInfo(Vector2D v2d, String tag) {
 		this.vec = v2d;
 		this.tag = tag; 
 

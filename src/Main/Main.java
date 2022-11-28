@@ -7,7 +7,8 @@ import java.awt.Color;
 
 import Data.BoundingBox;
 import Data.Vector2D;
-import Data.spriteInfo;
+import Data.Wave;
+import Data.SpriteInfo;
 import FileIO.EZFileRead;
 import logic.Control;
 import timer.stopWatchX;
@@ -17,9 +18,8 @@ public class Main {
 	public static Color c = new Color(0, 6, 43);
 	public static stopWatchX timer = new stopWatchX(300); // set flashing timer to 150 or 1/4 of second
 
-
 	// collection to hold our animation frames
-	public static ArrayList<spriteInfo> sprites = new ArrayList<>();
+	public static ArrayList<SpriteInfo> sprites = new ArrayList<>();
 	public static int currentSpriteIndex = 0;
 
 	// collection to hold our bounding boxes
@@ -30,14 +30,19 @@ public class Main {
 
 	// Variables for rendering img/txt
 	public static String trigger = "";
-	public static String doorbell = "";
+	public static String doorbell = "", cointText = "";
 	public static String spriteInfo = "front0";
 
 	// hold our sprite reference
 	public static Vector2D spriteCoords = new Vector2D(80, 0);
 	// public static Vector2D spriteCoords = new Vector2D(230, 135);
-	public static spriteInfo spriteRender = new spriteInfo(spriteCoords, spriteInfo);
-	public static BoundingBox doorBoundary;
+	public static SpriteInfo spriteRender = new SpriteInfo(spriteCoords, spriteInfo);
+	public static BoundingBox doorBoundary, coinBoundary;
+
+	// coin count
+	public static stopWatchX cw = new stopWatchX(3000);
+	public static boolean coinPresent = true;
+	public static Wave coinSound = new Wave("sounds/coinsSound.wav");
 
 	// End Static fields...
 
@@ -53,10 +58,10 @@ public class Main {
 		// TODO: Add boundaries based on window dimensions; Mac resolution differs
 
 		// Bounds for game; window dimensions
-		bounds.add(new BoundingBox(new Vector2D(-128, -128), 1400, 100)); // TOP Boundary
-		bounds.add(new BoundingBox(new Vector2D(-128, 720), 1400, 100)); // BOTTOM Boundary
+		bounds.add(new BoundingBox(new Vector2D(-128, -128), 1400, 120)); // TOP Boundary
+		bounds.add(new BoundingBox(new Vector2D(-128, 711), 1400, 100)); // BOTTOM Boundary
 		bounds.add(new BoundingBox(new Vector2D(-128, -128), 170, 800)); // LEFT Boundary
-		bounds.add(new BoundingBox(new Vector2D(1280, -128), 150, 800)); // RIGHT Boundary
+		bounds.add(new BoundingBox(new Vector2D(1270, -128), 150, 800)); // RIGHT Boundary
 
 		// Path boundaries
 		bounds.add(new BoundingBox(new Vector2D(210, 0), 0, 210)); // left path (above middle row path)
@@ -65,7 +70,7 @@ public class Main {
 		bounds.add(new BoundingBox(new Vector2D(210, 460), 720, 400)); // middle row (bottom) TODO: figure out why the hieght is not being set accordingly
 		bounds.add(new BoundingBox(new Vector2D(210, 230), 580, 0)); // left of left bush
 		bounds.add(new BoundingBox(new Vector2D(955, 230), 400, 0)); // right side bush
-		bounds.add(new BoundingBox(new Vector2D(1100, 475), 300, 65)); // little garden area (btm right corner)
+		bounds.add(new BoundingBox(new Vector2D(1100, 475), 300, 60)); // little garden area (btm right corner)
 		
 
 		// boundary for objects
@@ -74,10 +79,13 @@ public class Main {
 		// house boundaries
 		doorBoundary = new BoundingBox(new Vector2D(740, 110), 100, 0);
 		bounds.add(doorBoundary); // house door boundaries
+		coinBoundary = new BoundingBox(new Vector2D(1090, 510), 5, 45);
+		bounds.add(coinBoundary);
 
 
 
-		sprites.add(new spriteInfo(new Vector2D(0, 0), "background"));
+		sprites.add(new SpriteInfo(new Vector2D(0, 0), "background"));
+		// sprites.add(new spriteInfo(new Vector2D(0, 0), "backgroundMac"));
 		sprites.add(spriteRender);
 		
 		// read file; txt for our character
@@ -100,8 +108,15 @@ public class Main {
 
 		// set background
 		ctrl.addSpriteToFrontBuffer(0, 0, "background");
-		// oldCoords = spriteRender.getCoords();
-		ctrl.drawString(100, 205, trigger, c);
+		// ctrl.addSpriteToFrontBuffer(0, 0, "backgroundMac");
+		// draw coin
+		if (coinPresent) {
+			ctrl.addSpriteToFrontBuffer(1150, 510, "coin2");
+		} else {
+			ctrl.drawString(1090, 510, cointText, c);
+		}
+
+		// ctrl.drawString(100, 205, trigger, c);
 		ctrl.drawString(550, 205, doorbell, c);
 
 
@@ -116,11 +131,15 @@ public class Main {
 
 		if (timer.isTimeUp()) timer.resetWatch();
 
+		if (cw.isTimeUp()) {
+			Main.coinPresent = true;
+			coinSound.resetWAV();
+		}
 	}
 
 	// Additional Static methods below...(if needed)
-	public static boolean checkCollision(BoundingBox box1, BoundingBox box2) {
-		return !( (box1.getX1() > box2.getX2()) || (box1.getX2() < box2.getX1()) ||(box1.getY1() > box2.getY2()) || (box1.getY2() < box2.getY1()) );
+	public static boolean checkCollision(BoundingBox spriteBox, BoundingBox box2) {
+		return !( (spriteBox.getX1() > box2.getX2()) || (spriteBox.getX2() < box2.getX1()) ||(spriteBox.getY1() > box2.getY2()) || (spriteBox.getY2() < box2.getY1()) );
 	}
 
 	public static void moveCharacterBack() {
