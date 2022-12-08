@@ -35,8 +35,7 @@ public class Main {
 	public static String spriteInfo = "front0";
 
 	// hold our sprite reference
-	public static Vector2D spriteCoords = new Vector2D(80, 50);
-	// public static Vector2D spriteCoords = new Vector2D(230, 135);
+	public static Vector2D spriteCoords = new Vector2D(170, 80);
 	public static SpriteInfo spriteRender = new SpriteInfo(spriteCoords, spriteInfo);
 	public static BoundingBox doorBoundary, coinBoundary;
 
@@ -57,31 +56,9 @@ public class Main {
 	public static void start() {
 		// TODO: Code your starting conditions here...NOT DRAW CALLS HERE! (no addSprite
 		// or drawString)
-		// TODO: Add boundaries based on window dimensions; Mac resolution differs
 
-		// Bounds for game; window dimensions
-		bounds.add(new BoundingBox(new Vector2D(-128, -128), 1400, 160)); // TOP Boundary
-		bounds.add(new BoundingBox(new Vector2D(-128, 700), 1400, 100)); // BOTTOM Boundary
-		bounds.add(new BoundingBox(new Vector2D(-128, -128), 170, 800)); // LEFT Boundary
-		bounds.add(new BoundingBox(new Vector2D(1260, -128), 150, 800)); // RIGHT Boundary
+		// TODO: Add boundaries based on window dimensions
 
-		// Path boundaries
-		bounds.add(new BoundingBox(new Vector2D(210, 0), 0, 210)); // left path (above middle row path)
-		bounds.add(new BoundingBox(new Vector2D(210, 460), 0, 450)); // left path (below middle row path)
-		bounds.add(new BoundingBox(new Vector2D(210, 460), 720, 400)); // middle row (bottom) TODO: figure out why the hieght is not being set accordingly
-		bounds.add(new BoundingBox(new Vector2D(210, 230), 580, 0)); // left of left bush
-		bounds.add(new BoundingBox(new Vector2D(955, 230), 400, 0)); // right side bush
-		bounds.add(new BoundingBox(new Vector2D(1100, 465), 300, 40)); // little garden area (btm right corner)
-		
-
-		// boundary for objects
-		bounds.add(new BoundingBox(new Vector2D(230, 125), 100, 105)); // beutiful tree
-		bounds.add(new BoundingBox(new Vector2D(280, 555), 100, 105)); // stick tree
-		// house boundaries
-		doorBoundary = new BoundingBox(new Vector2D(740, 110), 100, 0);
-		bounds.add(doorBoundary); // house door boundaries
-		coinBoundary = new BoundingBox(new Vector2D(1090, 480), 5, 30);
-		bounds.add(coinBoundary);
 
 
 		// Store images into some collection; requirement
@@ -109,30 +86,24 @@ public class Main {
 
 		// set background
 		// ctrl.addSpriteToFrontBuffer(0, 0, "background");
-		ctrl.addSpriteToFrontBuffer(sprites.get(0).getCoords().getX(), sprites.get(0).getCoords().getY(), sprites.get(0).getTag());
+		ctrl.addSpriteToFrontBuffer(sprites.get(0).getCoords().getX(), sprites.get(0).getCoords().getY(), "newbg");
 
 		// draw coin
-		if (coinPresent) {
-			// ctrl.addSpriteToFrontBuffer(1090, 500, "coin");
-			ctrl.addSpriteToFrontBuffer(sprites.get(1).getCoords().getX(), sprites.get(1).getCoords().getY(), sprites.get(1).getTag());
-		} else {
-			ctrl.drawString(1090, 500, cointText, c);
-		}
 		// if coins collected show on screen
 		if (coinsCollected > 0) {
 			ctrl.drawString(1175, 50, String.format("%d Coin(s)", coinsCollected), coinColor);
 		}
 
 		// ctrl.drawString(100, 205, trigger, c);
+		// Door bell text
 		ctrl.drawString(550, 205, doorbell, c);
 
 
-		for (int i = 0; i < bounds.size(); i++) {
-			if (checkCollision(spriteRender.getBoundingBox(), bounds.get(i))) {
-				spriteRender.bounceBack();
-			}
-		}
-
+		// for (int i = 0; i < bounds.size(); i++) {
+		// 	if (checkCollision(spriteRender.getBoundingBox(), bounds.get(i))) {
+		// 		spriteRender.bounceBack();
+		// 	}
+		// }
 		ctrl.addSpriteToFrontBuffer(spriteRender.getCoords().getX(), spriteRender.getCoords().getY(), spriteRender.getTag());
 
 

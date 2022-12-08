@@ -13,7 +13,7 @@ public class KeyProcessor{
 	// private static stopWatchX cw = new stopWatchX(1000);
 
 	// changing sprite image rendered
-	private static final int MOVE_PX = 16;
+	private static final int MOVE_PX = 4;
 	private static String spriteInfo = "";
 	private static int spriteMoveCount = 0;
 	private static Data.SpriteInfo spriteObject = Main.spriteRender;
@@ -67,12 +67,12 @@ public class KeyProcessor{
 
 			boolean doorCheck = ((Main.spriteRender.getBoundingBox().getY1()  - Main.doorBoundary.getY2() < 30) && Main.spriteRender.getBoundingBox().getX1() > Main.doorBoundary.getX1() && Main.spriteRender.getBoundingBox().getX1() < Main.doorBoundary.getX2() );
 			if (doorCheck && Main.spriteRender.getTag().contains("up")) {
-				Main.doorbell = "Next level"; //TODO: diff doorbell text
+				Main.doorbell = "Next level";
 			}
 
 			boolean coinCheck = ( (Main.spriteRender.getBoundingBox().getCenterHeight() >= Main.coinBoundary.getY1() || Main.coinBoundary.getY1() - Main.spriteRender.getBoundingBox().getCenterHeight() < 50) && (Main.spriteRender.getBoundingBox().getCenterHeight() <= Main.coinBoundary.getY2())  && (Main.coinBoundary.getX1() - Main.spriteRender.getBoundingBox().getX1() < 150));
 			if (coinCheck && Main.spriteRender.getTag().contains("right") && Main.cw.isTimeUp()) {
-				Main.cointText = "Coin collected"; // TOOD: add the actual coin when on WINDOWS
+				Main.cointText = "Coin collected";
 				Main.coinPresent = false;
 				Main.coinsCollected++;
 
