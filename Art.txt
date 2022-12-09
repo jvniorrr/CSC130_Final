@@ -1,4 +1,3 @@
-Art/f.png*f0
 Art/fighter.png*fighter
 Art/avatar.png*front0
 Art/right/RightAvatarOne.png*right0
@@ -19,3 +18,4 @@ Art/down/DownAvatarThree.png*down2
 Art/down/DownAvatarTwo.png*down3
 Art/background.png*background
 Art/Coin.png*coin
+Art/house.png*house
