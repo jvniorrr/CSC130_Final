@@ -2,14 +2,11 @@ package Main;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.StringTokenizer;
 import java.awt.Color;
 
 import Data.BoundingBox;
 import Data.Vector2D;
-import Data.Wave;
 import Data.SpriteInfo;
-import FileIO.EZFileRead;
 import logic.Control;
 import timer.stopWatchX;
 
@@ -43,9 +40,9 @@ public class Main {
 	// coin count
 	public static stopWatchX cw = new stopWatchX(3000);
 	public static boolean coinPresent = true;
-	public static Wave coinSound = new Wave("sounds/coinsSound.wav");
 	public static int coinsCollected = 0;
 
+	public static stopWatchX doorbellWatch = new stopWatchX(2500);
 	// End Static fields...
 
 	public static void main(String[] args) {
@@ -57,7 +54,6 @@ public class Main {
 	public static void start() {
 		// TODO: Code your starting conditions here...NOT DRAW CALLS HERE! (no addSprite
 		// or drawString)
-		// TODO: Add boundaries based on window dimensions; Mac resolution differs
 
 		// Bounds for game; window dimensions
 		bounds.add(new BoundingBox(new Vector2D(-128, -128), 1400, 160)); // TOP Boundary
@@ -65,21 +61,18 @@ public class Main {
 		bounds.add(new BoundingBox(new Vector2D(-128, -128), 170, 800)); // LEFT Boundary
 		bounds.add(new BoundingBox(new Vector2D(1260, -128), 150, 800)); // RIGHT Boundary
 
-		// Path boundaries
-		bounds.add(new BoundingBox(new Vector2D(210, 0), 0, 210)); // left path (above middle row path)
-		bounds.add(new BoundingBox(new Vector2D(210, 460), 0, 450)); // left path (below middle row path)
-		bounds.add(new BoundingBox(new Vector2D(210, 460), 720, 400)); // middle row (bottom) TODO: figure out why the hieght is not being set accordingly
-		bounds.add(new BoundingBox(new Vector2D(210, 230), 580, 0)); // left of left bush
-		bounds.add(new BoundingBox(new Vector2D(955, 230), 400, 0)); // right side bush
-		bounds.add(new BoundingBox(new Vector2D(1100, 465), 300, 40)); // little garden area (btm right corner)
-		
+		// Path boundaries ; 
+		bounds.add(new BoundingBox(new Vector2D(235, 0), 575, 225)); // above middle row path, tree and left side of house boundaries
+		bounds.add(new BoundingBox(new Vector2D(235, 460), 685, 400)); // below middle row path boundaries
 
-		// boundary for objects
-		bounds.add(new BoundingBox(new Vector2D(230, 125), 100, 105)); // beutiful tree
-		bounds.add(new BoundingBox(new Vector2D(280, 555), 100, 105)); // stick tree
+		bounds.add(new BoundingBox(new Vector2D(955, 230), 400, 0)); // right side bush area, and right side of house boundaries
+		bounds.add(new BoundingBox(new Vector2D(1100, 465), 300, 40)); // little garden area (btm right corner)
+		// boundary for tree objects
+		// bounds.add(new BoundingBox(new Vector2D(230, 125), 100, 105)); // beautiful tree boundaries
+		bounds.add(new BoundingBox(new Vector2D(280, 555), 100, 105)); // stick tree boundaries
 		// house boundaries
 		doorBoundary = new BoundingBox(new Vector2D(740, 110), 100, 0);
-		bounds.add(doorBoundary); // house door boundaries
+		bounds.add(doorBoundary);
 		coinBoundary = new BoundingBox(new Vector2D(1090, 480), 5, 30);
 		bounds.add(coinBoundary);
 
@@ -87,16 +80,8 @@ public class Main {
 		// Store images into some collection; requirement
 		sprites.add(new SpriteInfo(new Vector2D(0, 0), "background"));
 		sprites.add(new SpriteInfo(new Vector2D(1090, 500), "coin"));
+		sprites.add(new SpriteInfo(new Vector2D(560, 0), "house"));
 		sprites.add(spriteRender);
-		
-		// read file; txt for our character
-		EZFileRead ezr = new EZFileRead("Arthur.txt");
-		String st;
-		while (!(st = ezr.getNextLine()).equalsIgnoreCase("END OF FILE")) {
-			StringTokenizer tokenizer = new StringTokenizer(st, "*");
-			map.put(tokenizer.nextToken(), tokenizer.nextToken());
-		}
-		
 
 	}
 
@@ -106,9 +91,7 @@ public class Main {
 	 */
 	public static void update(Control ctrl) {
 		// TODO: This is where you can code! (Starting code below is just to show you
-
 		// set background
-		// ctrl.addSpriteToFrontBuffer(0, 0, "background");
 		ctrl.addSpriteToFrontBuffer(sprites.get(0).getCoords().getX(), sprites.get(0).getCoords().getY(), sprites.get(0).getTag());
 
 		// draw coin
@@ -128,19 +111,20 @@ public class Main {
 
 
 		for (int i = 0; i < bounds.size(); i++) {
-			if (checkCollision(spriteRender.getBoundingBox(), bounds.get(i))) {
-				spriteRender.bounceBack();
+			if (checkCollision(sprites.get(3).getBoundingBox(), bounds.get(i))) {
+				sprites.get(3).bounceBack();
 			}
 		}
+		// draw interactable house obj
+		ctrl.addSpriteToFrontBuffer(sprites.get(2).getCoords().getX(), sprites.get(2).getCoords().getY(), sprites.get(2).getTag());
 
-		ctrl.addSpriteToFrontBuffer(spriteRender.getCoords().getX(), spriteRender.getCoords().getY(), spriteRender.getTag());
+		ctrl.addSpriteToFrontBuffer(sprites.get(3).getCoords().getX(), sprites.get(3).getCoords().getY(), sprites.get(3).getTag());
 
 
 		if (timer.isTimeUp()) timer.resetWatch();
 
 		if (cw.isTimeUp()) {
 			Main.coinPresent = true;
-			coinSound.resetWAV();
 		}
 	}
 

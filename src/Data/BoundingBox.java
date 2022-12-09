@@ -4,9 +4,6 @@ public class BoundingBox {
     // fields
     private Vector2D spriteLocation;
     private int x1, x2, y1, y2;
-    
-
-    // TODO: Add a circle collision in case want to later do some circles
 
     // CONSTRUCTORS
     // Bounding box 'default' constructor so to say since we need a sprite
