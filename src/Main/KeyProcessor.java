@@ -13,7 +13,7 @@ public class KeyProcessor{
 	// private static stopWatchX cw = new stopWatchX(1000);
 
 	// changing sprite image rendered
-	private static final int MOVE_PX = 4;
+	private static int MOVE_PX = 4;
 	private static String spriteInfo = "";
 	private static int spriteMoveCount = 0;
 	private static Data.SpriteInfo spriteObject = Main.spriteRender;
@@ -42,46 +42,34 @@ public class KeyProcessor{
 			break;
 			
 		// My input handlers
+		// Move North
 		case 'w':
 			lastKey = 'w';
 			spriteInfo = "up";
 			moveSprite(spriteInfo, 0, -MOVE_PX, key);
 			break;
+		// Move West
 		case 'a':
 			lastKey = 'a';
 			spriteInfo = "left";
 			moveSprite(spriteInfo, -MOVE_PX, 0, key);
 			break;
+		// Move South
 		case 's':
 			lastKey = 's';
 			spriteInfo = "down";
 			moveSprite(spriteInfo, 0, MOVE_PX, key);
 			break;
+		// Move East
 		case 'd':
 			lastKey = 'd';
 			spriteInfo = "right";
 			moveSprite(spriteInfo, MOVE_PX, 0, key);
 			break;
+
+		// Spacebar trigger
 		case '$':
 			lastKey = '$';
-
-			boolean doorCheck = ((Main.spriteRender.getBoundingBox().getY1()  - Main.doorBoundary.getY2() < 30) && Main.spriteRender.getBoundingBox().getX1() > Main.doorBoundary.getX1() && Main.spriteRender.getBoundingBox().getX1() < Main.doorBoundary.getX2() );
-			if (doorCheck && Main.spriteRender.getTag().contains("up")) {
-				Main.doorbell = "Next level";
-			}
-
-			boolean coinCheck = ( (Main.spriteRender.getBoundingBox().getCenterHeight() >= Main.coinBoundary.getY1() || Main.coinBoundary.getY1() - Main.spriteRender.getBoundingBox().getCenterHeight() < 50) && (Main.spriteRender.getBoundingBox().getCenterHeight() <= Main.coinBoundary.getY2())  && (Main.coinBoundary.getX1() - Main.spriteRender.getBoundingBox().getX1() < 150));
-			if (coinCheck && Main.spriteRender.getTag().contains("right") && Main.cw.isTimeUp()) {
-				Main.cointText = "Coin collected";
-				Main.coinPresent = false;
-				Main.coinsCollected++;
-
-				// play sound
-				Main.coinSound.playWAV();
-
-				Main.cw.resetWatch();
-			}
-			
 			break;
 
 		// TODO: Remove prior to submission; TESTING PURPOSES
@@ -92,10 +80,11 @@ public class KeyProcessor{
 			break;
 		case 'b':
 			spriteObject.setTag("front0");
-			// spriteObject.getCoords().setX(1095);
 			spriteObject.getCoords().setX(825);
-			// spriteObject.getCoords().setY(580);
 			spriteObject.getCoords().setY(230);
+			break;
+		case 'n':
+			MOVE_PX = (MOVE_PX == 32 ? 4 : 32);
 			break;
 		case 'm':
 			lastKey ='m';
@@ -104,6 +93,7 @@ public class KeyProcessor{
 			break;
 		}
 	}
+
 
 	private static void moveSprite(String spriteInfo, int moveCountX, int moveCountY, char key) {
 		if (key == lastKey) {

@@ -3,9 +3,13 @@ package Main;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.StringTokenizer;
+
+import org.omg.CORBA.ARG_IN;
+
 import java.awt.Color;
 
 import Data.BoundingBox;
+import Data.BoundingBoxBit;
 import Data.Vector2D;
 import Data.Wave;
 import Data.SpriteInfo;
@@ -24,10 +28,8 @@ public class Main {
 	public static int currentSpriteIndex = 0;
 
 	// collection to hold our bounding boxes
-	private static ArrayList<BoundingBox> bounds = new ArrayList<>();
+	private static ArrayList<BoundingBoxBit> bounds = new ArrayList<>();
 
-	// Map to store character strings
-	public static HashMap<String, String> map = new HashMap<>();
 
 	// Variables for rendering img/txt
 	public static String trigger = "";
@@ -57,24 +59,12 @@ public class Main {
 		// TODO: Code your starting conditions here...NOT DRAW CALLS HERE! (no addSprite
 		// or drawString)
 
-		// TODO: Add boundaries based on window dimensions
-
-
-
 		// Store images into some collection; requirement
 		sprites.add(new SpriteInfo(new Vector2D(0, 0), "background"));
-		sprites.add(new SpriteInfo(new Vector2D(1090, 500), "coin"));
-		sprites.add(spriteRender);
-		
-		// read file; txt for our character
-		EZFileRead ezr = new EZFileRead("Arthur.txt");
-		String st;
-		while (!(st = ezr.getNextLine()).equalsIgnoreCase("END OF FILE")) {
-			StringTokenizer tokenizer = new StringTokenizer(st, "*");
-			map.put(tokenizer.nextToken(), tokenizer.nextToken());
-		}
-		
+		// sprites.add(new SpriteInfo(new Vector2D(1090, 500), "coin"));
 
+		// setup our bounding constraints
+		 bounds = setBoundingAreas();
 	}
 
 	/*
@@ -86,38 +76,56 @@ public class Main {
 
 		// set background
 		// ctrl.addSpriteToFrontBuffer(0, 0, "background");
-		ctrl.addSpriteToFrontBuffer(sprites.get(0).getCoords().getX(), sprites.get(0).getCoords().getY(), "newbg");
+		ctrl.addSpriteToFrontBuffer(0, 0, "newbg");
 
-		// draw coin
-		// if coins collected show on screen
-		if (coinsCollected > 0) {
-			ctrl.drawString(1175, 50, String.format("%d Coin(s)", coinsCollected), coinColor);
+
+		for (int i = 0; i < bounds.size(); i++) {
+			if (BoundingBoxBit.checkCollision(spriteRender.getBoundingBox(), bounds.get(i))) {
+				spriteRender.bounceBack();
+			}
 		}
-
-		// ctrl.drawString(100, 205, trigger, c);
-		// Door bell text
-		ctrl.drawString(550, 205, doorbell, c);
-
-
-		// for (int i = 0; i < bounds.size(); i++) {
-		// 	if (checkCollision(spriteRender.getBoundingBox(), bounds.get(i))) {
-		// 		spriteRender.bounceBack();
-		// 	}
-		// }
 		ctrl.addSpriteToFrontBuffer(spriteRender.getCoords().getX(), spriteRender.getCoords().getY(), spriteRender.getTag());
 
 
 		if (timer.isTimeUp()) timer.resetWatch();
 
-		if (cw.isTimeUp()) {
-			Main.coinPresent = true;
-			coinSound.resetWAV();
-		}
+		// if (cw.isTimeUp()) {
+		// 	Main.coinPresent = true;
+		// 	coinSound.resetWAV();
+		// }
 	}
 
 	// Additional Static methods below...(if needed)
-	public static boolean checkCollision(BoundingBox spriteBox, BoundingBox box2) {
-		return !( (spriteBox.getX1() > box2.getX2()) || (spriteBox.getX2() < box2.getX1()) ||(spriteBox.getY1() > box2.getY2()) || (spriteBox.getY2() < box2.getY1()) );
+	public static ArrayList<BoundingBoxBit> setBoundingAreas() {
+		ArrayList<BoundingBoxBit> bounds = new ArrayList<>();
+
+		// SET WINDOW CONSTRAINTS
+		BoundingBoxBit top = new BoundingBoxBit(true, 0, 1280, 0, 0);
+		bounds.add(top);
+		BoundingBoxBit bottom = new BoundingBoxBit(true, 0, 1280, 715, 720);
+		bounds.add(bottom);
+		BoundingBoxBit left = new BoundingBoxBit(true, 0, 0, 0, 720);
+		bounds.add(left);
+		BoundingBoxBit right = new BoundingBoxBit(true, 1280, 1280, 0, 720);
+		bounds.add(right);
+
+		BoundingBoxBit orangeHouse = new BoundingBoxBit(true, 175, 225, 40, 75); // orange house
+		bounds.add(orangeHouse);
+
+		BoundingBoxBit left_of_orange_house = new BoundingBoxBit(true, 125, 175, 0, 65); // left_of_orange_house
+		bounds.add(left_of_orange_house);
+
+		BoundingBoxBit whiteHouse = new BoundingBoxBit(true, 335, 400, 75, 120); // white house
+		bounds.add(whiteHouse);
+
+		BoundingBoxBit left_bushes = new BoundingBoxBit(true, 90, 90, 0, 375);
+		bounds.add(left_bushes);
+
+		BoundingBoxBit left_of_treasure = new BoundingBoxBit(true, 120, 205, 120, 325); // left_of_treasure
+		bounds.add(left_of_treasure);
+
+		return bounds;
 	}
+	
 
 }

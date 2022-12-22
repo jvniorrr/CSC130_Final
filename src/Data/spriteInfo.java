@@ -8,7 +8,7 @@ public class SpriteInfo {
 	private String tag;
 
 	// bounding box and type
-	private BoundingBox boundingBox;
+	private BoundingBoxBit boundingBox;
 
 	// store last position of our sprite
 	private Vector2D lastVec;
@@ -20,7 +20,7 @@ public class SpriteInfo {
 
 		this.lastVec = new Vector2D(0, 0);
 		// set bounding box defaults
-		this.boundingBox = new BoundingBox(v2d);
+		this.boundingBox = new BoundingBoxBit(v2d.getX(), v2d.getY());
 	}
 
 	// Methods
@@ -36,7 +36,7 @@ public class SpriteInfo {
 		return this.lastVec;
 	}
 
-	public BoundingBox getBoundingBox() {
+	public BoundingBoxBit getBoundingBox() {
 		return boundingBox;
 	}
 
@@ -45,30 +45,7 @@ public class SpriteInfo {
 	public void setTag(String newTag) {
 		this.tag = newTag;
 	}
-
-	public void setCoords(Vector2D newV2D) {
-		this.lastVec = vec;
-
-		this.vec = newV2D;
-		this.boundingBox = new BoundingBox(newV2D);
-	}
-
-	public void setCoords(int x, int y) {
-		// reset our old coordinates
-		this.lastVec = this.vec;
-
-		this.vec.setX(x);
-		this.vec.setY(y);
-		this.boundingBox = new BoundingBox(this.vec);
-	}
 	
-	public void setBoundingBox(BoundingBox boundingBox) {
-		this.boundingBox = boundingBox;
-	}
-	
-	public void setLastVec(Vector2D lastVec) {
-		this.lastVec = lastVec;
-	}
 
 	// Misc methods for moving our sprite and setting the sprite accordingly 
 	// Move sprites
@@ -79,28 +56,14 @@ public class SpriteInfo {
 		this.vec.adjustX(x);
 		this.vec.adjustY(y);
 
-		this.boundingBox = new BoundingBox(this.vec);
-	}
-	public void moveSpriteX(int x) {
-		// this.lastVec = vec;
-		this.lastVec.setX(this.vec.getX());
-		// this.lastVec.setY(this.vec.getY());
-
-		this.vec.adjustX(x);
-		this.boundingBox = new BoundingBox(this.vec);
-	}
-	public void moveSpriteY(int y) {
-		this.lastVec.setY(this.vec.getY());
-
-		this.vec.adjustY(y);
-		this.boundingBox = new BoundingBox(this.vec);
+		this.boundingBox = new BoundingBoxBit(this.vec.getX(), this.vec.getY());
 	}
 
 	public void bounceBack() {
 		
 		this.vec.setX(this.lastVec.getX());;
 		this.vec.setY(this.lastVec.getY());;
-		this.boundingBox = new BoundingBox(this.vec);
+		this.boundingBox = new BoundingBoxBit(this.vec.getX(), this.vec.getY());
 	}
 
 	@Override
