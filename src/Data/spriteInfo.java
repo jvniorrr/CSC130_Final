@@ -45,7 +45,9 @@ public class SpriteInfo {
 	public void setTag(String newTag) {
 		this.tag = newTag;
 	}
-	
+	public void setVec(Vector2D vec) {
+		this.vec = new Vector2D(vec.getX(), vec.getY());
+	}
 
 	// Misc methods for moving our sprite and setting the sprite accordingly 
 	// Move sprites
@@ -61,10 +63,11 @@ public class SpriteInfo {
 
 	public void bounceBack() {
 		
-		this.vec.setX(this.lastVec.getX());;
-		this.vec.setY(this.lastVec.getY());;
+		this.vec.setX(this.lastVec.getX());
+		this.vec.setY(this.lastVec.getY());
 		this.boundingBox = new BoundingBoxBit(this.vec.getX(), this.vec.getY());
 	}
+
 
 	@Override
 	public String toString() {

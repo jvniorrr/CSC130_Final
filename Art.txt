@@ -1,4 +1,5 @@
 Art/f.png*f0
+Art/pokemon.png*pokemon
 Art/fighter.png*fighter
 Art/background.png*background
 Art/Coin.png*coin
