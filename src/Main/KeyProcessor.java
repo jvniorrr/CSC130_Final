@@ -10,7 +10,6 @@ public class KeyProcessor{
 	private static char last = ' ';			// For debouncing purposes
 	private static char lastKey = ' ';
 	private static stopWatchX sw = new stopWatchX(250);
-	// private static stopWatchX cw = new stopWatchX(1000);
 
 	// changing sprite image rendered
 	private static int MOVE_PX = 4;
@@ -27,12 +26,6 @@ public class KeyProcessor{
 		last = key;
 		sw.resetWatch();
 
-		// if (cw.isTimeUp()) {
-		// 	Main.coinPresent = true;
-		// 	cw.resetWatch();
-		// }
-
-		Main.doorbell = ""; // reset
 		spriteObject = Main.spriteRender;
 		
 		/* TODO: You can modify values below here! */
@@ -75,7 +68,7 @@ public class KeyProcessor{
 		// TODO: Remove prior to submission; TESTING PURPOSES
 		case 'r':
 			spriteObject.setTag("front0");
-			spriteObject.getCoords().setX(80);
+			spriteObject.getCoords().setX(95);
 			spriteObject.getCoords().setY(50);
 			break;
 		case 'b':
@@ -83,6 +76,7 @@ public class KeyProcessor{
 			spriteObject.getCoords().setX(825);
 			spriteObject.getCoords().setY(230);
 			break;
+		// TODO: Remove this only for debugging purposes
 		case 'n':
 			MOVE_PX = (MOVE_PX == 32 ? 4 : 32);
 			break;
