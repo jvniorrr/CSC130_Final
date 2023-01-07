@@ -54,8 +54,10 @@ public class Main {
 		 bounds = setBoundingAreas();
 
 		// setup our characters in array list
+		// pokemon.getSprite().getBoundingBox().setX2(pokemon.getSprite().getBoundingBox().getX1() + 8);
+		// pokemon.getSprite().getBoundingBox().setY2(pokemon.getSprite().getBoundingBox().getY1() +  8);
 		characters.add(spriteRender);
-		// characters.add(pokemon.getSprite());
+		characters.add(pokemon.getSprite());
 	}
 
 	/*
@@ -90,15 +92,16 @@ public class Main {
 
 		ctrl.addSpriteToFrontBuffer(spriteRender.getCoords().getX(), spriteRender.getCoords().getY(), spriteRender.getTag());
 
-		// ctrl.addSpriteToFrontBuffer(pokemon.getSprite().getCoords().getX(), pokemon.getSprite().getCoords().getY(), pokemon.getSprite().getTag());
+		ctrl.addSpriteToFrontBuffer(pokemon.getSprite().getCoords().getX(), pokemon.getSprite().getCoords().getY(), pokemon.getSprite().getTag());
 
+		// ctrl.addSpriteToFrontBuffer(170, 80, "beastball");
 
 		if (timer.isTimeUp()) timer.resetWatch();
 
-		// if (pokemonStopWatch.isTimeUp()) {
-		// 	pokemon.pokemonMovement();
-		// 	pokemonStopWatch.resetWatch();
-		// }
+		if (pokemonStopWatch.isTimeUp()) {
+			pokemon.pokemonMovement();
+			pokemonStopWatch.resetWatch();
+		}
 	}
 
 	// Additional Static methods below...(if needed)
@@ -141,9 +144,13 @@ public class Main {
 		BoundingBoxBit top_right_brown_house = new BoundingBoxBit(true, 145, 320, 375, 495); // top of brown house, right side to bridge
 		bounds.add(top_right_brown_house);
 
-		// MISC CONSTRAINTS
-		BoundingBoxBit left_bushes = new BoundingBoxBit(true, 90, 90, 0, 375); // left side bushes
-		bounds.add(left_bushes);
+		// BUILDING CONSTRAINTS
+		BoundingBoxBit buildings = new BoundingBoxBit(true, 842, 1280, 385, 512); // buildings and grey sidewalk (below) constraints
+		bounds.add(buildings);
+		BoundingBoxBit bottom_buildings_path = new BoundingBoxBit(true, 842, 1175, 552, 720); // below buildings; tropical portion
+		bounds.add(bottom_buildings_path);
+		BoundingBoxBit building_path_right = new BoundingBoxBit(true, 1175, 1175, 517, 558);
+		bounds.add(building_path_right);
 
 		// TREASURE CONSTRANITS
 		BoundingBoxBit top_treasure = new BoundingBoxBit(true, 125, 230, 120, 245); // top of treasure; assure path is contstraining
@@ -160,12 +167,26 @@ public class Main {
 		bounds.add(bottom_of_bridge);
 		
 		// FOREST OR TREES CONSTRAINTS
-		BoundingBoxBit bottom_of_trees = new BoundingBoxBit(true, 478, 787, 0, 320);
-		bounds.add(bottom_of_trees);
+		BoundingBoxBit forest = new BoundingBoxBit(true, 478, 787, 0, 320); // forest area
+		bounds.add(forest);
 
 		// GARDEN AREA CONSTRAINTS
 		BoundingBoxBit top_of_garden = new BoundingBoxBit(true, 480, 787, 375, 495); // garden area
 		bounds.add(top_of_garden);
+
+		// MISC CONSTRAINTS
+		BoundingBoxBit top_grey_sidewalk = new BoundingBoxBit(true, 842, 1280, 100, 310); // above the grey sidewalk area
+		bounds.add(top_grey_sidewalk);
+		BoundingBoxBit left_bushes = new BoundingBoxBit(true, 90, 90, 0, 375); // left side bushes
+		bounds.add(left_bushes);
+		BoundingBoxBit grave_path = new BoundingBoxBit(true, 0, 790, 551, 720); // grave_path
+		bounds.add(grave_path);
+		BoundingBoxBit top_of_stairs = new BoundingBoxBit(true, 787, 1280, 50, 50);
+		bounds.add(top_of_stairs);
+		// apple trees constraints; this is TBD as may add more to game
+		BoundingBoxBit apple_trees = new BoundingBoxBit(true, 900, 1280, 318, 385);
+		bounds.add(apple_trees);
+
 
 		return bounds;
 	}
