@@ -62,9 +62,36 @@ public class BoundingBoxBit {
         this.y2 = y2;
     }
 
+    // misc methods
+    /* 
+     * Method to reset our boundaries of our object
+     */
+    public void resetBoundingBox(int x, int y) {
+        this.x1 = x;
+        this.x2 = x + 16;
+        this.y1 = y;
+        this.y2 = y + 16;
+    }
+
+    /* 
+     * Method to get centers of Bounding box
+     */
+    public int getAverageX() {
+        return (this.x1 + this.x2) / 2;
+    }
+    public int getAverageY() {
+        return (this.y1 + this.y2) / 2;
+    }
+
 
     // Collision detection method
     public static boolean checkCollision(BoundingBoxBit spriteBox, BoundingBoxBit box2) {
         return !( (spriteBox.getX1() > box2.getX2()) || (spriteBox.getX2() < box2.getX1()) ||(spriteBox.getY1() > box2.getY2()) || (spriteBox.getY2() < box2.getY1()) );
     }
+
+    // TO STRING
+    @Override
+    public String toString() {
+        return "BoundingBoxBit [x1=" + x1 + ", x2=" + x2 + ", y1=" + y1 + ", y2=" + y2 + "]";
+    }    
 }
