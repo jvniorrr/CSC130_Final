@@ -119,25 +119,32 @@ public class Main {
 
 			// grab the bullets position by reference & direction they should be going
 			String direction = "right";
+			// MOVE CHARACTER LEFT / WEST
 			if (currInnerMap.get("left") != null) {
 				direction = "left";
 				// adjust the position of the vector
-				actionPosition = (Vector2D) currInnerMap.get(direction); // MOVE CHARACTER LEFT / WEST
+				actionPosition = (Vector2D) currInnerMap.get(direction);
 				actionPosition.adjustX(-DEFAULT_ACTION_MOVEMENT);
-			} else if (currInnerMap.get("right") != null) {
+			}
+			// MOVE CHARACTER RIGHT / EAST
+			else if (currInnerMap.get("right") != null) {
 				direction = "right";
 				// adjust the position of the vector
-				actionPosition = (Vector2D) currInnerMap.get(direction); // MOVE CHARACTER RIGHT / EAST
-				actionPosition.adjustX(-DEFAULT_ACTION_MOVEMENT);
-			} else if (currInnerMap.get("up") != null) {
+				actionPosition = (Vector2D) currInnerMap.get(direction);
+				actionPosition.adjustX(DEFAULT_ACTION_MOVEMENT);
+			}
+			// MOVE CHARACTER UP / NORTH
+			else if (currInnerMap.get("up") != null) {
 				direction = "up";
 				// adjust the position of the vector
-				actionPosition = ((Vector2D) currInnerMap.get(direction)); // MOVE CHARACTER UP / NORTH
+				actionPosition = ((Vector2D) currInnerMap.get(direction));
 				actionPosition.adjustY(-DEFAULT_ACTION_MOVEMENT);
-			} else if (currInnerMap.get("down") != null) {
+			} 
+			// MOVE CHARACTER DOWN / SOUTH
+			else if (currInnerMap.get("down") != null) {
 				direction = "down";
 				// adjust the position of the vector
-				actionPosition =  ((Vector2D) currInnerMap.get(direction)); // MOVE CHARACTER DOWN / SOUTH
+				actionPosition =  ((Vector2D) currInnerMap.get(direction));
 				actionPosition.adjustY(DEFAULT_ACTION_MOVEMENT);
 			}
 
@@ -155,12 +162,12 @@ public class Main {
 					// check if collision below
 					if (collides) {
 						// retrieve vector value
-						Vector2D blastPosition = (Vector2D) currInnerMap.get(direction);
-						ctrl.addSpriteToFrontBuffer(blastPosition.getX(), blastPosition.getY(), "hit"); // draw hit sprite 
-						if (direction.equalsIgnoreCase("right")) blastPosition.adjustX(2); // EAST
-						else if (direction.equalsIgnoreCase("left")) blastPosition.adjustX(-2); // WEST
-						else if (direction.equalsIgnoreCase("up")) blastPosition.adjustY(-2); // NORTH
-						else if (direction.equalsIgnoreCase("down")) blastPosition.adjustY(2); // SOUTH
+						String tmpTag = "hit";
+						if (direction.equalsIgnoreCase("right")) tmpTag = "righthit"; // EAST
+						else if (direction.equalsIgnoreCase("left")) tmpTag = "lefthit"; // WEST
+						else if (direction.equalsIgnoreCase("up")) tmpTag = "uphit"; // NORTH
+						else if (direction.equalsIgnoreCase("down")) tmpTag = "downhit"; // SOUTH
+						ctrl.addSpriteToFrontBuffer(weaponActions.get(i).getCoords().getX(), weaponActions.get(i).getCoords().getY(), tmpTag); // draw hit sprite 
 
 						currInnerMap.put("displayed", Integer.parseInt(currInnerMap.get("displayed").toString()) + 1); // next time round it will draw nothing
 
@@ -169,7 +176,7 @@ public class Main {
 							// remove from array
 							weaponActions.remove(i);
 						}
-					} else  if (Integer.parseInt(currInnerMap.get("displayed").toString()) < 1) {
+					} else if (Integer.parseInt(currInnerMap.get("displayed").toString()) < 1) {
 						// check if it hasnt been drawn and hasnt past a sprite image
 						ctrl.addSpriteToFrontBuffer(weaponActions.get(i).getCoords().getX(),
 								weaponActions.get(i).getCoords().getY(), weaponActions.get(i).getTag());

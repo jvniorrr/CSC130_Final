@@ -31,3 +31,7 @@ Art/items/downbullet.png*downbullet
 Art/items/rightbullet.png*rightbullet
 Art/items/leftbullet.png*leftbullet
 Art/items/hit.png*hit
+Art/items/lefthit.png*lefthit
+Art/items/righthit.png*righthit
+Art/items/uphit.png*uphit
+Art/items/downhit.png*downhit
