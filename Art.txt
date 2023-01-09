@@ -21,3 +21,13 @@ Art/16-bit/right1.png*right0
 Art/16-bit/right0.png*right1
 Art/16-bit/right2.png*right2
 Art/16-bit/right0.png*right3
+Art/items/rightpistol.png*rightpistol
+Art/items/leftpistol.png*leftpistol
+Art/items/uppistol.png*uppistol
+Art/items/downpistol.png*downpistol
+Art/items/downpistol2.png*downpistol2
+Art/items/upbullet.png*upbullet
+Art/items/downbullet.png*downbullet
+Art/items/rightbullet.png*rightbullet
+Art/items/leftbullet.png*leftbullet
+Art/items/hit.png*hit
