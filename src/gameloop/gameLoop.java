@@ -5,19 +5,19 @@ import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.util.List;
 
-import Data.gameString;
+import Data.GameString;
 import Graphics.Graphic;
 import Graphics.Sprites;
 
 public class gameLoop{
 	Graphic _gph;
-	List<gameString> _gs;
+	List<GameString> _gs;
 	Sprites _sps, _overlays;
 	BufferedImage _fade;
 	float _alpha;
 	boolean _isFade;
 	
-	public gameLoop(Graphic gph, List<gameString> gs, Sprites sps, Sprites overlays){
+	public gameLoop(Graphic gph, List<GameString> gs, Sprites sps, Sprites overlays){
 		if(gph == null)		throw new NullPointerException();
 		_gph = gph;
 		_gs = gs;

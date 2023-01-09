@@ -14,11 +14,11 @@ import java.util.Iterator;
 import java.util.List;
 
 import Data.Sprite;
-import Data.gameString;
+import Data.GameString;
 
 public class Renderer{
 	
-	public static void render(Graphics g, List<gameString> gs, Sprites sps, Sprites overlays, float alpha, boolean isFade){
+	public static void render(Graphics g, List<GameString> gs, Sprites sps, Sprites overlays, float alpha, boolean isFade){
 		/* This is a generic function that can start fresh for any new gaming project.
 		 * All one has to do is wipe the contents and start new and it should work fine
 		 * with the rest of the game engine. */
@@ -31,7 +31,7 @@ public class Renderer{
 		}
 		
 		// ... then text
-		for(gameString a: gs){
+		for(GameString a: gs){
 			Font temp = a.getFont().deriveFont(Font.BOLD);
 			g.setFont(temp);
 			g.setColor(a.getColor());

@@ -4,6 +4,8 @@ package Main;
 
 import logic.Control;
 import timer.stopWatchX;
+import Data.SpriteInfo;
+import Data.Weapon;
 
 public class KeyProcessor{
 	// Static Fields
@@ -15,7 +17,7 @@ public class KeyProcessor{
 	private static int MOVE_PX = 4;
 	private static String spriteInfo = "";
 	private static int spriteMoveCount = 0;
-	private static Data.SpriteInfo spriteObject = Main.spriteRender;
+	private static SpriteInfo character = Main.spriteRender;
 	
 	// Static Method(s)
 	public static void processKey(char key){
@@ -26,7 +28,9 @@ public class KeyProcessor{
 		last = key;
 		sw.resetWatch();
 
-		spriteObject = Main.spriteRender;
+		character = Main.spriteRender;
+		Weapon weapon = character.getWeapon();
+		
 		
 		/* TODO: You can modify values below here! */
 		switch(key){
@@ -35,25 +39,25 @@ public class KeyProcessor{
 			break;
 			
 		// My input handlers
-		// Move North
+		// NORTH
 		case 'w':
 			lastKey = 'w';
 			spriteInfo = "up";
 			moveSprite(spriteInfo, 0, -MOVE_PX, key);
 			break;
-		// Move West
+		// WEST
 		case 'a':
 			lastKey = 'a';
 			spriteInfo = "left";
 			moveSprite(spriteInfo, -MOVE_PX, 0, key);
 			break;
-		// Move South
+		// SOUTH
 		case 's':
 			lastKey = 's';
 			spriteInfo = "down";
 			moveSprite(spriteInfo, 0, MOVE_PX, key);
 			break;
-		// Move East
+		// EAST
 		case 'd':
 			lastKey = 'd';
 			spriteInfo = "right";
@@ -62,19 +66,29 @@ public class KeyProcessor{
 
 		// Spacebar trigger
 		case '$':
+			if (character.isWeaponPresent() && !Main.weaponCooldown.isTimeUp()) {
+				weapon.setTrigger(true);
+			}
+
 			lastKey = '$';
+			break;
+
+		// p trigger; for weapons
+		case 'p':
+			lastKey = 'p';
+			Main.spriteRender.setWeaponPresent(!Main.spriteRender.isWeaponPresent());
 			break;
 
 		// TODO: Remove prior to submission; TESTING PURPOSES
 		case 'r':
-			spriteObject.setTag("front0");
-			spriteObject.getCoords().setX(95);
-			spriteObject.getCoords().setY(50);
+			character.setTag("front0");
+			character.getCoords().setX(95);
+			character.getCoords().setY(50);
 			break;
 		case 'b':
-			spriteObject.setTag("front0");
-			spriteObject.getCoords().setX(825);
-			spriteObject.getCoords().setY(230);
+			character.setTag("front0");
+			character.getCoords().setX(825);
+			character.getCoords().setY(230);
 			break;
 		// TODO: Remove this only for debugging purposes
 		case 'n':
@@ -95,11 +109,11 @@ public class KeyProcessor{
 			if (spriteMoveCount >= 4) {
 				spriteMoveCount = 0;
 			}
-			spriteObject.setTag(spriteInfo + spriteMoveCount);
+			character.setTag(spriteInfo + spriteMoveCount);
 		} else {
 			spriteMoveCount = 0;
-			spriteObject.setTag(spriteInfo + spriteMoveCount);
+			character.setTag(spriteInfo + spriteMoveCount);
 		}
-		spriteObject.moveSprite(moveCountX, moveCountY);
+		character.moveSprite(moveCountX, moveCountY);
 	}
 }

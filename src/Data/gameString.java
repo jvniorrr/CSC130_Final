@@ -6,13 +6,13 @@ import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.util.ArrayList;
 
-public class gameString{
+public class GameString{
 	private String _str;
 	private Color _color;
 	private int _x, _y;
 	private Font cFont;
 	
-	public gameString(Color color,
+	public GameString(Color color,
 			int x, int y, String str, Font font, float scaleFactor){
 		_str = str;
 		_color = color;

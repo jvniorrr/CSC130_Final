@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.StringTokenizer;
 
 import Data.Sprite;
-import Data.gameString;
+import Data.GameString;
 import FileIO.EZFileRead;
 import Graphics.Graphic;
 import Graphics.Sprites;
@@ -27,7 +27,7 @@ public class Control{
 	private Sprites backbuffer;
 	private Sprites frontbuffer;
 	private Sprites overlaybuffer;
-	private ArrayList<gameString> gs;
+	private ArrayList<GameString> gs;
 	private Keyb kb;
 	private gameLoop gl;
 	private Font font;
@@ -68,7 +68,7 @@ public class Control{
 	
 	// WARNING! DO NOT MODIFY THE CODE HERE! THIS IS HERE TO GET THE GAME LIBRARY TO WORK!
 	public void drawString(int x, int y, String text, Color c){
-		gs.add(new gameString(c, x, y, text, font, 1.0f));
+		gs.add(new GameString(c, x, y, text, font, 1.0f));
 	}
 	
 	// WARNING! DO NOT MODIFY THE CODE HERE! THIS IS HERE TO GET THE GAME LIBRARY TO WORK!
