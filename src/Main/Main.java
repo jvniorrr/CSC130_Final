@@ -1,12 +1,17 @@
 package Main;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Vector;
 
+import javax.swing.text.Position;
 
 import java.awt.Color;
 import Data.BoundingBoxBit;
 import Data.PokemonSprite;
 import Data.Vector2D;
+import Data.Weapon;
 import Data.SpriteInfo;
 import logic.Control;
 import timer.stopWatchX;
@@ -22,13 +27,21 @@ public class Main {
 	// collection to hold our bounding boxes
 	private static ArrayList<BoundingBoxBit> bounds = new ArrayList<>();
 
-
 	// Variables for rendering img/txt
 	public static String spriteInfo = "front0";
 
 	// hold our sprite reference
 	public static Vector2D spriteCoords = new Vector2D(170, 80);
 	public static SpriteInfo spriteRender = new SpriteInfo(spriteCoords, spriteInfo);
+
+	public static Weapon weapon = new Weapon(spriteCoords, "downpistol");
+	// FIXME: change this to a linked list or similar preferably. memory issues
+	// could be present
+	public static ArrayList<SpriteInfo> weaponActions = new ArrayList<>();
+	public static HashMap<Integer, HashMap<String, Object>> weaponActionsMap = new HashMap<>(); // {"0": { "left":
+																								// "Vector2D[x, y"}, }
+	public static stopWatchX weaponCooldown = new stopWatchX(250);
+	public static final int DEFAULT_ACTION_MOVEMENT = 2;
 
 	public static Vector2D pokemonVector = new Vector2D(93, 320);
 	public static PokemonSprite pokemon = new PokemonSprite(true, pokemonVector, "pokemon");
@@ -46,16 +59,19 @@ public class Main {
 	public static void start() {
 		// TODO: Code your starting conditions here...NOT DRAW CALLS HERE! (no addSprite
 		// or drawString)
+		// set new box for pokemon
+		// pokemon.getSprite().getBoundingBox().setX2(pokemon.getSprite().getBoundingBox().getX2() + 32);
+		// pokemon.getSprite().getBoundingBox().setY2(pokemon.getSprite().getBoundingBox().getY2() + 32);
 
 		// Store images into some collection; requirement
 		sprites.add(new SpriteInfo(new Vector2D(0, 0), "background"));
 
 		// setup our bounding constraints
-		 bounds = setBoundingAreas();
+		bounds = setBoundingAreas();
 
 		// setup our characters in array list
-		// pokemon.getSprite().getBoundingBox().setX2(pokemon.getSprite().getBoundingBox().getX1() + 8);
-		// pokemon.getSprite().getBoundingBox().setY2(pokemon.getSprite().getBoundingBox().getY1() +  8);
+		spriteRender.setWeapon(weapon);
+
 		characters.add(spriteRender);
 		characters.add(pokemon.getSprite());
 	}
@@ -68,21 +84,24 @@ public class Main {
 		// TODO: This is where you can code! (Starting code below is just to show you
 
 		// set background
-		// ctrl.addSpriteToFrontBuffer(0, 0, "background");
 		ctrl.addSpriteToFrontBuffer(0, 0, "newbg");
 
-
-		for (int i=0; i<characters.size(); i++) {
-			for (int j=0; j<bounds.size(); j++) {
+		// draw our characters and assure they are not colliding with boundaries or
+		// other objects
+		for (int i = 0; i < characters.size(); i++) {
+			for (int j = 0; j < bounds.size(); j++) {
 				if (BoundingBoxBit.checkCollision(characters.get(i).getBoundingBox(), bounds.get(j))) {
 					characters.get(i).bounceBack();
 				}
 			}
 
+
+
 			// assure our characters dont collide
 			if (characters.size() > 1) {
-				for (int j=i+1; j<characters.size(); j++) {
-					if (BoundingBoxBit.checkCollision(characters.get(i).getBoundingBox(), characters.get(j).getBoundingBox())) {
+				for (int j = i + 1; j < characters.size(); j++) {
+					if (BoundingBoxBit.checkCollision(characters.get(i).getBoundingBox(),
+							characters.get(j).getBoundingBox())) {
 						characters.get(i).bounceBack();
 					}
 				}
@@ -90,21 +109,130 @@ public class Main {
 
 		}
 
-		ctrl.addSpriteToFrontBuffer(spriteRender.getCoords().getX(), spriteRender.getCoords().getY(), spriteRender.getTag());
+		// draw weapon actions; ie bullets.
+		for (int i = 0; i < weaponActions.size(); i++) {
+			// retrieve inner map
+			HashMap<String, Object> currInnerMap = weaponActionsMap.get(i);
 
-		ctrl.addSpriteToFrontBuffer(pokemon.getSprite().getCoords().getX(), pokemon.getSprite().getCoords().getY(), pokemon.getSprite().getTag());
+			// retrieve vector
+			Vector2D actionPosition = new Vector2D(0, 0); // default value
 
-		// ctrl.addSpriteToFrontBuffer(170, 80, "beastball");
+			// grab the bullets position by reference & direction they should be going
+			String direction = "right";
+			if (currInnerMap.get("left") != null) {
+				direction = "left";
+				// adjust the position of the vector
+				actionPosition = (Vector2D) currInnerMap.get(direction); // MOVE CHARACTER LEFT / WEST
+				actionPosition.adjustX(-DEFAULT_ACTION_MOVEMENT);
+			} else if (currInnerMap.get("right") != null) {
+				direction = "right";
+				// adjust the position of the vector
+				actionPosition = (Vector2D) currInnerMap.get(direction); // MOVE CHARACTER RIGHT / EAST
+				actionPosition.adjustX(-DEFAULT_ACTION_MOVEMENT);
+			} else if (currInnerMap.get("up") != null) {
+				direction = "up";
+				// adjust the position of the vector
+				actionPosition = ((Vector2D) currInnerMap.get(direction)); // MOVE CHARACTER UP / NORTH
+				actionPosition.adjustY(-DEFAULT_ACTION_MOVEMENT);
+			} else if (currInnerMap.get("down") != null) {
+				direction = "down";
+				// adjust the position of the vector
+				actionPosition =  ((Vector2D) currInnerMap.get(direction)); // MOVE CHARACTER DOWN / SOUTH
+				actionPosition.adjustY(DEFAULT_ACTION_MOVEMENT);
+			}
 
-		if (timer.isTimeUp()) timer.resetWatch();
+			// check every object in our characters assure isnt colliding
+			for (int j=1; j<characters.size(); j++) {
+				// variable to check if collides with any character
+				boolean collides = false;
+				// assure we havent already drawn the hit sprite one time prior
+				// 0 means we have not displayed hit any times so show action instead
+				int HIT_DISPLAYS = 8;
+				if (Integer.parseInt(currInnerMap.get("displayed").toString()) < HIT_DISPLAYS) {
+					// create tmp bounding box to verify
+					BoundingBoxBit actionBoundingBox = new BoundingBoxBit(true, actionPosition.getX(), actionPosition.getX() + 24, actionPosition.getY(), actionPosition.getY() + 24);
+					collides = BoundingBoxBit.checkCollision(characters.get(j).getBoundingBox(), actionBoundingBox); // check collision
+					// check if collision below
+					if (collides) {
+						// retrieve vector value
+						Vector2D blastPosition = (Vector2D) currInnerMap.get(direction);
+						ctrl.addSpriteToFrontBuffer(blastPosition.getX(), blastPosition.getY(), "hit"); // draw hit sprite 
+						if (direction.equalsIgnoreCase("right")) blastPosition.adjustX(2); // EAST
+						else if (direction.equalsIgnoreCase("left")) blastPosition.adjustX(-2); // WEST
+						else if (direction.equalsIgnoreCase("up")) blastPosition.adjustY(-2); // NORTH
+						else if (direction.equalsIgnoreCase("down")) blastPosition.adjustY(2); // SOUTH
 
+						currInnerMap.put("displayed", Integer.parseInt(currInnerMap.get("displayed").toString()) + 1); // next time round it will draw nothing
+
+						if (Integer.parseInt(currInnerMap.get("displayed").toString()) >= HIT_DISPLAYS) {
+
+							// remove from array
+							weaponActions.remove(i);
+						}
+					} else  if (Integer.parseInt(currInnerMap.get("displayed").toString()) < 1) {
+						// check if it hasnt been drawn and hasnt past a sprite image
+						ctrl.addSpriteToFrontBuffer(weaponActions.get(i).getCoords().getX(),
+								weaponActions.get(i).getCoords().getY(), weaponActions.get(i).getTag());
+					}
+				}
+			}
+		}
+
+		// draw the weapon under char if facing up or down
+		if (spriteRender.isWeaponPresent() && spriteRender.getTag().contains("up")) {
+			weapon.setTag("uppistol");
+			ctrl.addSpriteToFrontBuffer(weapon.getCoords().getX(), weapon.getCoords().getY(), weapon.getTag());
+		}
+		// draw character
+		ctrl.addSpriteToFrontBuffer(spriteRender.getCoords().getX(), spriteRender.getCoords().getY(),
+				spriteRender.getTag());
+
+		// draw pokemons
+		ctrl.addSpriteToFrontBuffer(pokemon.getSprite().getCoords().getX(), pokemon.getSprite().getCoords().getY(),
+				pokemon.getSprite().getTag());
+
+		// draw the weapon under if they are facing up / NORTH
+		if (spriteRender.isWeaponPresent() && !(spriteRender.getTag().contains("up"))) {
+
+			// check positioning of character
+			if (spriteRender.getTag().contains("left")) {
+				weapon.setTag("leftpistol");
+			} else if (spriteRender.getTag().contains("up")) {
+				weapon.setTag("uppistol");
+			} else if (spriteRender.getTag().contains("down")) {
+				weapon.setTag("downpistol2");
+			} else {
+				weapon.setTag("rightpistol");
+			}
+			// draw the weapon in front of the
+			ctrl.addSpriteToFrontBuffer(weapon.getCoords().getX(), weapon.getCoords().getY(), weapon.getTag());
+		}
+
+		// reset the draw
+		if (timer.isTimeUp())
+			timer.resetWatch();
+
+		// timewatch is for the movement of our pokemon
 		if (pokemonStopWatch.isTimeUp()) {
 			pokemon.pokemonMovement();
 			pokemonStopWatch.resetWatch();
 		}
+
+		if (weaponCooldown.isTimeUp()) {
+			// check if the user pressed p and they are holding the weapon
+			if (spriteRender.isWeaponPresent() && weapon.isTrigger()) {
+				weaponTrigger(ctrl);
+			}
+
+			weaponCooldown.resetWatch();
+		}
 	}
 
 	// Additional Static methods below...(if needed)
+
+	/*
+	 * Method to set the bounds / constraints of map and paths
+	 */
 	public static ArrayList<BoundingBoxBit> setBoundingAreas() {
 		ArrayList<BoundingBoxBit> bounds = new ArrayList<>();
 
@@ -139,21 +267,26 @@ public class Main {
 		// BROWN HOUSE CONSTRAINTS
 		BoundingBoxBit top_brown_house = new BoundingBoxBit(true, 115, 140, 360, 475); // top of brown house path bounds
 		bounds.add(top_brown_house);
-		BoundingBoxBit top_left_brown_house = new BoundingBoxBit(true, 90, 110, 375, 495); // top of brown house, left side
+		BoundingBoxBit top_left_brown_house = new BoundingBoxBit(true, 90, 110, 375, 495); // top of brown house, left
+																							// side
 		bounds.add(top_left_brown_house);
-		BoundingBoxBit top_right_brown_house = new BoundingBoxBit(true, 145, 320, 375, 495); // top of brown house, right side to bridge
+		BoundingBoxBit top_right_brown_house = new BoundingBoxBit(true, 145, 320, 375, 495); // top of brown house,
+																								// right side to bridge
 		bounds.add(top_right_brown_house);
 
 		// BUILDING CONSTRAINTS
-		BoundingBoxBit buildings = new BoundingBoxBit(true, 842, 1280, 385, 512); // buildings and grey sidewalk (below) constraints
+		BoundingBoxBit buildings = new BoundingBoxBit(true, 842, 1280, 385, 512); // buildings and grey sidewalk (below)
+																					// constraints
 		bounds.add(buildings);
-		BoundingBoxBit bottom_buildings_path = new BoundingBoxBit(true, 842, 1175, 552, 720); // below buildings; tropical portion
+		BoundingBoxBit bottom_buildings_path = new BoundingBoxBit(true, 842, 1175, 552, 720); // below buildings;
+																								// tropical portion
 		bounds.add(bottom_buildings_path);
 		BoundingBoxBit building_path_right = new BoundingBoxBit(true, 1175, 1175, 517, 558);
 		bounds.add(building_path_right);
 
 		// TREASURE CONSTRANITS
-		BoundingBoxBit top_treasure = new BoundingBoxBit(true, 125, 230, 120, 245); // top of treasure; assure path is contstraining
+		BoundingBoxBit top_treasure = new BoundingBoxBit(true, 125, 230, 120, 245); // top of treasure; assure path is
+																					// contstraining
 		bounds.add(top_treasure);
 		BoundingBoxBit left_of_treasure = new BoundingBoxBit(true, 120, 205, 120, 320); // left_of_treasure
 		bounds.add(left_of_treasure);
@@ -165,7 +298,7 @@ public class Main {
 		bounds.add(top_of_bridge);
 		BoundingBoxBit bottom_of_bridge = new BoundingBoxBit(true, 320, 478, 383, 495); // lighter bridge
 		bounds.add(bottom_of_bridge);
-		
+
 		// FOREST OR TREES CONSTRAINTS
 		BoundingBoxBit forest = new BoundingBoxBit(true, 478, 787, 0, 320); // forest area
 		bounds.add(forest);
@@ -175,21 +308,65 @@ public class Main {
 		bounds.add(top_of_garden);
 
 		// MISC CONSTRAINTS
-		BoundingBoxBit top_grey_sidewalk = new BoundingBoxBit(true, 842, 1280, 100, 310); // above the grey sidewalk area
+		BoundingBoxBit top_grey_sidewalk = new BoundingBoxBit(true, 842, 1280, 100, 310); // above the grey sidewalk
+																							// area
 		bounds.add(top_grey_sidewalk);
 		BoundingBoxBit left_bushes = new BoundingBoxBit(true, 90, 90, 0, 375); // left side bushes
 		bounds.add(left_bushes);
 		BoundingBoxBit grave_path = new BoundingBoxBit(true, 0, 790, 551, 720); // grave_path
 		bounds.add(grave_path);
-		BoundingBoxBit top_of_stairs = new BoundingBoxBit(true, 787, 1280, 50, 50);
+		BoundingBoxBit top_of_stairs = new BoundingBoxBit(true, 787, 1280, 50, 50); // right of forest area, above
+																					// stairs
 		bounds.add(top_of_stairs);
 		// apple trees constraints; this is TBD as may add more to game
-		BoundingBoxBit apple_trees = new BoundingBoxBit(true, 900, 1280, 318, 385);
+		BoundingBoxBit apple_trees = new BoundingBoxBit(true, 900, 1280, 318, 385); // above trees, block off for now
 		bounds.add(apple_trees);
-
 
 		return bounds;
 	}
-	
+
+	/*
+	 * Method that is triggered when the user presses 'p' character
+	 */
+	public static void weaponTrigger(Control ctrl) {
+		// get weapon and create new sprite for it
+		Weapon weapon = spriteRender.getWeapon();
+		SpriteInfo weaponAction = new SpriteInfo(new Vector2D(weapon.getCoords().getX(), weapon.getCoords().getY()),
+				"rightbullet");
+
+		// set the vector inside our map
+		HashMap<String, Object> innerMap = new HashMap<>();
+
+		// check the direction of character to set the action direction
+		if (spriteRender.getTag().contains("left")) {
+			weaponAction.setTag("leftbullet");
+			weaponAction.getCoords().adjustX(-DEFAULT_ACTION_MOVEMENT);
+			innerMap.put("left", weaponAction.getCoords());
+		} else if (spriteRender.getTag().contains("right")) {
+			weaponAction.setTag("rightbullet");
+			weaponAction.getCoords().adjustX(DEFAULT_ACTION_MOVEMENT);
+			innerMap.put("right", weaponAction.getCoords());
+		} else if (spriteRender.getTag().contains("up")) {
+			weaponAction.setTag("upbullet");
+			weaponAction.getCoords().adjustY(DEFAULT_ACTION_MOVEMENT);
+			innerMap.put("up", weaponAction.getCoords());
+		} else if (spriteRender.getTag().contains("down")) {
+			weaponAction.setTag("downbullet");
+			weaponAction.getCoords().adjustY(-DEFAULT_ACTION_MOVEMENT);
+			innerMap.put("down", weaponAction.getCoords());
+		}
+
+		innerMap.put("displayed", 0);
+		// System.out.println(innerMap);
+
+		// add the weapons action to an array to be populated and referenced in update()
+		weaponActionsMap.put(weaponActions.size(), innerMap);
+		weaponActions.add(weaponAction);
+
+		// reset the trigger
+		weapon.setTrigger(false);
+
+	}
+
 
 }

@@ -10,6 +10,7 @@ public class PokemonSprite {
     private Random rand;
 
     // attributes
+    private int health;
     private boolean visible;
     private String spriteTag;
 
@@ -23,6 +24,7 @@ public class PokemonSprite {
         this.spriteTag = "pokemon";
         this.location = new Vector2D(0, 0);
         this.sprite = new SpriteInfo(new Vector2D(this.location.getX(), this.location.getY()), spriteTag);
+        this.health = 100;
     }
 
     public PokemonSprite(boolean visible, Vector2D location, String spriteTag) {
@@ -31,6 +33,7 @@ public class PokemonSprite {
         this.location = location;
         this.spriteTag = spriteTag;
         this.sprite = new SpriteInfo(new Vector2D(this.location.getX(), this.location.getY()), this.spriteTag);
+        this.health = 100;
     }
 
     // GETTERS
@@ -49,6 +52,9 @@ public class PokemonSprite {
     public String getSpriteTag() {
         return spriteTag;
     }
+    public int getHealth() {
+        return health;
+    }
 
     // SETTERS
     public void setVisible(boolean visible) {
@@ -65,7 +71,11 @@ public class PokemonSprite {
 
     public void setSpriteTag(String spriteTag) {
         this.spriteTag = spriteTag;
+    }    
+    public void setHealth(int health) {
+        this.health = health;
     }
+
 
     // misc methods
 
@@ -97,7 +107,14 @@ public class PokemonSprite {
                 this.sprite.moveSprite(-MOVEMENT, 0);
                 break;
         }
+    }
 
+    /* 
+     * Method to remove health depending on rarity of weapon
+     */
+    public int adjustHealth(int health) {
+        this.health += health;
+        return this.health;
     }
 
 }
