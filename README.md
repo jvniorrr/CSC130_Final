@@ -1,6 +1,2 @@
 # CSC130_Final
- Final project for CSC 130 along with checkpoints
-
-
-Not the best :'(.
-Checkout my 16-bit branch though!! Really slick, needs few tweaks though. Pokemon theme based 2d game with a full map using external assets. 
+This repository contains the final project for CSC 130, along with the checkpoints. The project includes a 2D game based on the Pokemon theme with a full map, available in the 16-bit branch. The regular branch was created solely to fulfill the course requirement of a 2D game and does not have the Pokemon theme. Please check out the 16-bit branch if you are interested in the Pokemon-themed version.
