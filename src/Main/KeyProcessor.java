@@ -2,10 +2,10 @@
 
 package Main;
 
-import logic.Control;
-import timer.stopWatchX;
 import Data.SpriteInfo;
 import Data.Weapon;
+import logic.Control;
+import timer.stopWatchX;
 
 public class KeyProcessor{
 	// Static Fields

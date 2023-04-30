@@ -2,6 +2,7 @@
 
 package Data;
 
+
 public class SpriteInfo {
 	// Fields
 

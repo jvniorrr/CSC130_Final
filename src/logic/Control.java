@@ -78,6 +78,16 @@ public class Control{
 		s.moveYAbsolute(y);
 		frontbuffer.addSprite(s);
 	}
+
+	public void addSpriteToFrontBuffer(int x, int y, Sprite spr){
+		spr.moveXAbsolute(x);
+		spr.moveYAbsolute(y);
+		frontbuffer.addSprite(spr);
+	}
+
+	public Sprite getSpriteFromBackBuffer(String tag) {
+		return backbuffer.getSpriteByTag(tag);
+	}
 	
 	// WARNING! DO NOT MODIFY THE CODE HERE! THIS IS HERE TO GET THE GAME LIBRARY TO WORK!
 	private void loadArtIntoBackBuffer(){

@@ -10,6 +10,7 @@ import javax.swing.text.Position;
 import java.awt.Color;
 import Data.BoundingBoxBit;
 import Data.PokemonSprite;
+import Data.Sprite;
 import Data.Vector2D;
 import Data.Weapon;
 import Data.SpriteInfo;
@@ -167,7 +168,9 @@ public class Main {
 						else if (direction.equalsIgnoreCase("left")) tmpTag = "lefthit"; // WEST
 						else if (direction.equalsIgnoreCase("up")) tmpTag = "uphit"; // NORTH
 						else if (direction.equalsIgnoreCase("down")) tmpTag = "downhit"; // SOUTH
-						ctrl.addSpriteToFrontBuffer(weaponActions.get(i).getCoords().getX(), weaponActions.get(i).getCoords().getY(), tmpTag); // draw hit sprite 
+						Sprite tmp = ctrl.getSpriteFromBackBuffer(tmpTag);
+            			Sprite copy = new Sprite(tmp);
+						ctrl.addSpriteToFrontBuffer(weaponActions.get(i).getCoords().getX(), weaponActions.get(i).getCoords().getY(), copy); // draw hit sprite 
 
 						currInnerMap.put("displayed", Integer.parseInt(currInnerMap.get("displayed").toString()) + 1); // next time round it will draw nothing
 
@@ -178,8 +181,10 @@ public class Main {
 						}
 					} else if (Integer.parseInt(currInnerMap.get("displayed").toString()) < 1) {
 						// check if it hasnt been drawn and hasnt past a sprite image
+						Sprite tmp = ctrl.getSpriteFromBackBuffer(weaponActions.get(i).getTag());
+            			Sprite copy = new Sprite(tmp);
 						ctrl.addSpriteToFrontBuffer(weaponActions.get(i).getCoords().getX(),
-								weaponActions.get(i).getCoords().getY(), weaponActions.get(i).getTag());
+								weaponActions.get(i).getCoords().getY(), copy);
 					}
 				}
 			}
